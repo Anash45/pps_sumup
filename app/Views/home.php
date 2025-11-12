@@ -22,7 +22,7 @@
 
         <!-- Submit button -->
         <button type="submit"
-            class="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 focus:outline-none transition">
+            class="px-6 py-3 bg-blue-600 cursor-pointer text-white font-medium rounded-lg shadow hover:bg-blue-700 focus:outline-none transition">
             Build PDF
         </button>
     </form>
@@ -34,10 +34,10 @@
         </div>
     <?php endif; ?>
 
-    <!-- PDF download link -->
+    <!-- PDF download button -->
     <?php if (session()->getFlashdata('pdf_link')): ?>
-        <a href="<?= esc(session()->getFlashdata('pdf_link')) ?>" class="text-blue-600 underline hover:text-blue-800"
-            target="_blank">
+        <a href="<?= esc(session()->getFlashdata('pdf_link')) ?>" target="_blank"
+            class="inline-block px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-700 transition">
             Download PDF
         </a>
     <?php endif; ?>
