@@ -16,7 +16,7 @@
     <nav class="bg-white shadow-sm py-4">
         <div class="container mx-auto flex justify-center">
             <a href="/">
-                <img src="/pps_logo.svg" alt="Logo" class="h-10 w-auto">
+                <img src="<?= base_url('/pps_logo.svg') ?>" alt="Logo" class="h-10 w-auto">
             </a>
         </div>
     </nav>

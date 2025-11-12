@@ -182,7 +182,7 @@ class BuildPdf extends Controller
         session()->setFlashdata('pdf_link', $downloadUrl);
         session()->setFlashdata('message', 'PDF generated with QR codes for all URLs!');
 
-        return redirect()->to('/');
+        return redirect()->to(base_url('/'));
     }
 
     // Download route
