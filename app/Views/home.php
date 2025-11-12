@@ -4,7 +4,7 @@
 <div class="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
     <h1 class="text-3xl font-semibold text-gray-900">Welcome to Home Page</h1>
 
-    <form action="<?= base_url('build-pdf') ?>" method="POST" enctype="multipart/form-data"
+    <form action="/build-pdf" method="POST" enctype="multipart/form-data"
         class="mt-4 flex flex-col space-y-4 w-full max-w-md">
         <!-- Language selection -->
         <label class="font-medium text-gray-700">Select Template:</label>
