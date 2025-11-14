@@ -13,7 +13,7 @@ export default function Home() {
     const [message, setMessage] = useState(flash?.message || "");
     const [errors, setErrors] = useState([]);
 
-    console.log("pdfs: ", pdfs);
+    // console.log("pdfs: ", pdfs);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

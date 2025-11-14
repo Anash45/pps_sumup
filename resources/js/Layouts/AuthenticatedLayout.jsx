@@ -8,28 +8,55 @@ export default function AuthenticatedLayout({ title = "MyApp", children }) {
     const { url } = usePage(); // current URL
 
     const navLinks = [
-        { name: "Dashboard", href: "/dashboard" },
-        { name: "Sample PDFs", href: "/sample-pdfs" },
-        { name: "Profile", href: "/profile" },
-        { name: "Logout", href: "/logout" },
+        { name: "Dashboard", href: "/dashboard", method: "get" },
+        { name: "Sample PDFs", href: "/sample-pdfs", method: "get" },
+        { name: "Profile", href: "/profile", method: "get" },
+        { name: "Logout", href: "/logout", method: "post" },
     ];
 
     const renderLink = (link) => {
-        const isActive = url === link.href;
+        const isActive = link.method === "get" && url === link.href;
         const baseClasses = "font-medium px-3 py-2 rounded transition-colors";
         const activeClasses = isActive
             ? "bg-blue-600 text-white"
             : "text-gray-700 hover:text-gray-900";
 
+        if (link.method === "get") {
+            return (
+                <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`${baseClasses} ${activeClasses}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                >
+                    {link.name}
+                </Link>
+            );
+        }
+
+        // POST links (logout)
         return (
-            <Link
+            <form
                 key={link.href}
-                href={link.href}
-                className={`${baseClasses} ${activeClasses}`}
-                onClick={() => setMobileMenuOpen(false)}
+                method="POST"
+                action={link.href}
+                className="inline"
             >
-                {link.name}
-            </Link>
+                <input
+                    type="hidden"
+                    name="_token"
+                    value={document
+                        .querySelector('meta[name="csrf-token"]')
+                        ?.getAttribute("content")}
+                />
+                <button
+                    type="submit"
+                    className={`${baseClasses} text-gray-700 hover:text-gray-900`}
+                    onClick={() => setMobileMenuOpen(false)}
+                >
+                    {link.name}
+                </button>
+            </form>
         );
     };
 
