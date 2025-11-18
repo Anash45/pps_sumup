@@ -9,7 +9,7 @@ export default function AuthenticatedLayout({ title = "MyApp", children }) {
 
     const navLinks = [
         { name: "Dashboard", href: "/dashboard", method: "get" },
-        { name: "Sample PDFs", href: "/sample-pdfs", method: "get" },
+        { name: "Print PDFs", href: "/sample-pdfs", method: "get" },
         { name: "Profile", href: "/profile", method: "get" },
         { name: "Logout", href: "/logout", method: "post" },
     ];

@@ -76,7 +76,7 @@ export default function Index() {
             <div className="flex flex-col items-center w-full px-4 py-6">
                 <div className="w-full max-w-xl bg-white rounded-xl shadow-lg p-6 space-y-6">
                     <h1 className="text-2xl font-semibold text-gray-900 text-center">
-                        Upload Sample PDF
+                        Upload Print PDF
                     </h1>
 
                     {/* Success / message */}
