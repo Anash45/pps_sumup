@@ -13,6 +13,7 @@ export default function Index() {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const [message, setMessage] = useState(flash?.success || "");
+    const [separator, setSeparator] = useState(";");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,6 +30,7 @@ export default function Index() {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("pdf_file", file);
+        formData.append("separator", separator);
 
         try {
             const response = await axios.post("/sample-pdfs", formData, {
@@ -80,11 +82,10 @@ export default function Index() {
                     {/* Success / message */}
                     {message && (
                         <div
-                            className={`p-3 rounded ${
-                                errors.length > 0
+                            className={`p-3 rounded ${errors.length > 0
                                     ? "bg-red-100 text-red-700"
                                     : "bg-green-100 text-green-700"
-                            }`}
+                                }`}
                         >
                             {message}
                         </div>
@@ -129,12 +130,22 @@ export default function Index() {
                             className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
 
+                        <label className="font-medium text-gray-700">Separator:</label>
+                        <input
+                            type="text"
+                            name="separator"
+                            value={separator}
+                            onChange={(e) => setSeparator(e.target.value)}
+                            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter separator"
+                            required
+                        />
+
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`px-6 py-3 text-white font-medium rounded-lg shadow bg-blue-600 hover:bg-blue-700 transition flex items-center justify-center gap-2 ${
-                                loading ? "bg-gray-400 cursor-not-allowed" : ""
-                            }`}
+                            className={`px-6 py-3 text-white font-medium rounded-lg shadow bg-blue-600 hover:bg-blue-700 transition flex items-center justify-center gap-2 ${loading ? "bg-gray-400 cursor-not-allowed" : ""
+                                }`}
                         >
                             {loading && (
                                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -208,7 +219,7 @@ export default function Index() {
                                                         } else {
                                                             toast.error(
                                                                 data.message ||
-                                                                    "Failed to delete."
+                                                                "Failed to delete."
                                                             ); // ❌ error toast
                                                         }
                                                     } catch (err) {

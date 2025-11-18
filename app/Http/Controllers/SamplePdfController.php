@@ -28,6 +28,7 @@ class SamplePdfController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'pdf_file' => 'required|file|mimes:pdf|max:10240', // 10 MB max
+            'separator' => 'required|string|max:5', // <-- NEW VALIDATION
         ]);
 
         try {
@@ -36,13 +37,14 @@ class SamplePdfController extends Controller
             // Generate unique file name
             $fileName = Str::slug($request->title) . '-' . time() . '.' . $file->getClientOriginalExtension();
 
-            // Store in private storage
+            // Store in storage/app/sample_pdfs
             $filePath = $file->storeAs('sample_pdfs', $fileName);
 
             // Save in database
             $pdf = SamplePdf::create([
                 'title' => $request->title,
                 'path' => $filePath,
+                'separator' => $request->separator, // <-- SAVE NEW FIELD
             ]);
 
             return response()->json([
@@ -50,6 +52,7 @@ class SamplePdfController extends Controller
                 'message' => 'PDF uploaded successfully!',
                 'pdf' => $pdf,
             ]);
+
         } catch (\Exception $e) {
             \Log::error("Sample PDF upload failed: " . $e->getMessage());
 
