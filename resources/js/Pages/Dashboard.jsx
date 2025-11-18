@@ -49,7 +49,7 @@ export default function Home() {
                     setErrors(Object.values(response.data.errors).flat());
                 }
             }
-        } catch (err) {
+        } catch (err) { 
             console.error(err);
 
             if (err.response?.status === 422) {
