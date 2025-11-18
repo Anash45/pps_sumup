@@ -16,6 +16,7 @@ class MyPdfController extends Controller
         $request->validate([
             'samplePdf' => 'required|integer|exists:sample_pdfs,id',
             'csv_file' => 'required|file|mimes:csv,txt',
+            'separator' => 'required|string|max:5', // <-- NEW VALIDATION
         ]);
 
         $samplePdfId = $request->input('samplePdf');
@@ -45,23 +46,33 @@ class MyPdfController extends Controller
         $samplePdf = $samplePdfPath;
 
 
-        /** -------------------------
-         *   READ CSV
-         * ------------------------- */
-        $rows = array_map('str_getcsv', file($file->getRealPath()));
+        $separator = $request->input('separator'); // <-- user provided
+
+        $rows = [];
+        if (($handle = fopen($file->getRealPath(), 'r')) !== false) {
+            while (($data = fgetcsv($handle, 0, $separator)) !== false) {
+                $rows[] = $data;
+            }
+            fclose($handle);
+        }
+
         if (empty($rows)) {
             return response()->json(['success' => false, 'message' => 'CSV file is empty.']);
         }
 
+        // Extract headers
         $headers = array_shift($rows);
+
+        // Find the URL column
         $urlColumnIndex = array_search('URL', $headers);
         if ($urlColumnIndex === false) {
             return response()->json(['success' => false, 'message' => 'URLs not found in CSV.']);
         }
 
+        // Extract URLs for processing
         $urls = [];
         foreach ($rows as $row) {
-            if (!empty($row[$urlColumnIndex])) {
+            if (isset($row[$urlColumnIndex]) && !empty($row[$urlColumnIndex])) {
                 $urls[] = trim($row[$urlColumnIndex]);
             }
         }

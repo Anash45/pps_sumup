@@ -12,6 +12,7 @@ export default function Home() {
     const [pdfLinks, setPdfLinks] = useState(flash?.pdf_links || []);
     const [message, setMessage] = useState(flash?.message || "");
     const [errors, setErrors] = useState([]);
+    const [separator, setSeparator] = useState(";");
 
     // console.log("pdfs: ", pdfs);
 
@@ -22,6 +23,7 @@ export default function Home() {
         const formData = new FormData();
         formData.append("csv_file", csvFile);
         formData.append("samplePdf", samplePdf);
+        formData.append("separator", separator);
 
         try {
             setLoading(true);
@@ -108,6 +110,17 @@ export default function Home() {
                             required
                             onChange={(e) => setCsvFile(e.target.files[0])}
                             className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+
+                        <label className="font-medium text-gray-700">Separator:</label>
+                        <input
+                            type="text"
+                            name="separator"
+                            value={separator}
+                            onChange={(e) => setSeparator(e.target.value)}
+                            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter separator"
+                            required
                         />
 
                         {/* Validation errors */}

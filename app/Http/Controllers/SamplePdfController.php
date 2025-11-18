@@ -28,7 +28,6 @@ class SamplePdfController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'pdf_file' => 'required|file|mimes:pdf|max:10240', // 10 MB max
-            'separator' => 'required|string|max:5', // <-- NEW VALIDATION
         ]);
 
         try {
@@ -44,7 +43,6 @@ class SamplePdfController extends Controller
             $pdf = SamplePdf::create([
                 'title' => $request->title,
                 'path' => $filePath,
-                'separator' => $request->separator, // <-- SAVE NEW FIELD
             ]);
 
             return response()->json([

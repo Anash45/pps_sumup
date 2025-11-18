@@ -13,7 +13,6 @@ export default function Index() {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const [message, setMessage] = useState(flash?.success || "");
-    const [separator, setSeparator] = useState(";");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,7 +29,6 @@ export default function Index() {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("pdf_file", file);
-        formData.append("separator", separator);
 
         try {
             const response = await axios.post("/sample-pdfs", formData, {
@@ -128,17 +126,6 @@ export default function Index() {
                             onChange={(e) => setFile(e.target.files[0])}
                             required
                             className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-
-                        <label className="font-medium text-gray-700">Separator:</label>
-                        <input
-                            type="text"
-                            name="separator"
-                            value={separator}
-                            onChange={(e) => setSeparator(e.target.value)}
-                            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter separator"
-                            required
                         />
 
                         <button
