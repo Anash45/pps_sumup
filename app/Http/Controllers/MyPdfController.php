@@ -134,12 +134,23 @@ class MyPdfController extends Controller
             $start = $part * $cardsPerFile;
             $end = min($start + $cardsPerFile, $totalCardSlots);
 
+            $pageNumberInSheet = 0;
+            $sheetNumber = $part + 1;
+
             /** Loop through card slots */
             for ($i = $start; $i < $end; $i++) {
+
 
                 // Add new page
                 if (($i % $cardsPerPage) === 0) {
                     $pdf->AddPage();
+                    $pageNumberInSheet++;
+                    $pageName = "{$samplePdfRecord->title} - {$originalName} - File {$sheetNumber} - Sheet {$pageNumberInSheet}";
+
+                    // (Optional) Print the name on the page
+                    $pdf->SetFont('Helvetica', '', 8);
+                    $pdf->SetTextColor(0, 0, 0);
+                    $pdf->Text($xStart + 12, ($yStart + 6)/2, $pageName);
 
                     /** -------------------------
                      * DRAW GRID (BEHIND CARDS)
@@ -217,7 +228,7 @@ class MyPdfController extends Controller
             }
 
             /** Save PDF file */
-            $fileName = "{$originalName} Part " . ($part + 1) . ".pdf";
+            $fileName = "{$samplePdfRecord->title} - {$originalName} - File " . ($part + 1) . ".pdf";
             $fullPath = $saveDir . '/' . $fileName;
 
             $pdf->Output($fullPath, 'F');
