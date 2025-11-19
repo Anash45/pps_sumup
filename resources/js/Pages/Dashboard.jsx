@@ -34,11 +34,11 @@ export default function Home() {
             const response = await axios.post("/build-pdf", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        ?.getAttribute("content"),
                 },
             });
+
+            // 🔵 Always log success response
+            console.log("SUCCESS RESPONSE:", response.data);
 
             if (response.data.success) {
                 setPdfLinks(response.data.pdf_links);
@@ -49,7 +49,9 @@ export default function Home() {
                     setErrors(Object.values(response.data.errors).flat());
                 }
             }
-        } catch (err) { 
+        } catch (err) {
+            // 🔴 Always log error response
+            console.log("ERROR RESPONSE:", err.response?.data);
             console.error(err);
 
             if (err.response?.status === 422) {
@@ -112,7 +114,9 @@ export default function Home() {
                             className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
 
-                        <label className="font-medium text-gray-700">Separator:</label>
+                        <label className="font-medium text-gray-700">
+                            Separator:
+                        </label>
                         <input
                             type="text"
                             name="separator"
