@@ -1,11 +1,12 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 
 export default function Home() {
     const { flash, pdfs } = usePage().props;
+
     const [csvFile, setCsvFile] = useState(null);
     const [samplePdf, setSamplePdf] = useState("");
     const [loading, setLoading] = useState(false);
@@ -14,7 +15,16 @@ export default function Home() {
     const [errors, setErrors] = useState([]);
     const [separator, setSeparator] = useState(";");
 
-    // console.log("pdfs: ", pdfs);
+    // 🔹 Set CSRF token for axios globally
+    useEffect(() => {
+        const token = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute("content");
+
+        if (token) {
+            axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,7 +47,6 @@ export default function Home() {
                 },
             });
 
-            // 🔵 Always log success response
             console.log("SUCCESS RESPONSE:", response.data);
 
             if (response.data.success) {
@@ -50,9 +59,7 @@ export default function Home() {
                 }
             }
         } catch (err) {
-            // 🔴 Always log error response
             console.log("ERROR RESPONSE:", err);
-            console.error(err);
 
             if (err.response?.status === 422) {
                 const validationErrors = Object.values(
@@ -60,6 +67,8 @@ export default function Home() {
                 ).flat();
                 setErrors(validationErrors);
                 setMessage("Validation failed.");
+            } else if (err.response?.status === 419) {
+                setMessage("Session expired. Refresh the page.");
             } else {
                 setMessage("Failed to build PDF. Please try again.");
             }
@@ -94,8 +103,8 @@ export default function Home() {
                             className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">Select file</option>
-                            {pdfs.map((pdf, index) => (
-                                <option key={index} value={pdf.id}>
+                            {pdfs.map((pdf) => (
+                                <option key={pdf.id} value={pdf.id}>
                                     {pdf.title}
                                 </option>
                             ))}
@@ -122,9 +131,9 @@ export default function Home() {
                             name="separator"
                             value={separator}
                             onChange={(e) => setSeparator(e.target.value)}
-                            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter separator"
                             required
+                            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
 
                         {/* Validation errors */}
@@ -142,11 +151,10 @@ export default function Home() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`px-6 py-3 text-white font-medium rounded-lg shadow focus:outline-none transition flex items-center justify-center gap-2 ${
-                                loading
+                            className={`px-6 py-3 text-white font-medium rounded-lg shadow focus:outline-none transition flex items-center justify-center gap-2 ${loading
                                     ? "bg-gray-400 cursor-not-allowed"
                                     : "bg-blue-600 hover:bg-blue-700"
-                            }`}
+                                }`}
                         >
                             {loading && (
                                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -158,11 +166,10 @@ export default function Home() {
                     {/* Flash / message */}
                     {message && (
                         <div
-                            className={`text-center text-lg font-medium ${
-                                pdfLinks.length > 0
+                            className={`text-center text-lg font-medium ${pdfLinks.length > 0
                                     ? "text-green-600"
                                     : "text-red-600"
-                            }`}
+                                }`}
                         >
                             {message}
                         </div>

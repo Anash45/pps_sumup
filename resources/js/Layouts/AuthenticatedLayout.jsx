@@ -1,5 +1,5 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
 
@@ -34,22 +34,27 @@ export default function AuthenticatedLayout({ title = "MyApp", children }) {
             );
         }
 
-        // POST links (logout)
+        // POST actions (logout, etc.) using Inertia router
         return (
-            <form
+            <button
                 key={link.href}
-                method="POST"
-                action={link.href}
-                className="inline"
+                type="button"
+                className={`${baseClasses} text-gray-700 hover:text-gray-900`}
+                onClick={() => {
+                    setMobileMenuOpen(false);
+
+                    router.post(link.href, {}, {
+                        onSuccess: () => {
+                            console.log(`${link.name} successful`);
+                        },
+                        onError: () => {
+                            console.error(`${link.name} failed`);
+                        },
+                    });
+                }}
             >
-                <button
-                    type="submit"
-                    className={`${baseClasses} text-gray-700 hover:text-gray-900`}
-                    onClick={() => setMobileMenuOpen(false)}
-                >
-                    {link.name}
-                </button>
-            </form>
+                {link.name}
+            </button>
         );
     };
 
@@ -59,7 +64,7 @@ export default function AuthenticatedLayout({ title = "MyApp", children }) {
             <nav className="bg-white shadow-sm py-4">
                 <div className="container mx-auto flex items-center justify-between px-4">
                     {/* Logo */}
-                    <Link to="/">
+                    <Link href="/">
                         <ApplicationLogo className="h-8" />
                     </Link>
 
@@ -84,11 +89,10 @@ export default function AuthenticatedLayout({ title = "MyApp", children }) {
                     </div>
                 </div>
 
-                {/* Mobile menu (animated) */}
+                {/* Mobile menu */}
                 <div
-                    className={`md:hidden overflow-hidden transition-all duration-300 ${
-                        mobileMenuOpen ? "max-h-96" : "max-h-0"
-                    }`}
+                    className={`md:hidden overflow-hidden transition-all duration-300 ${mobileMenuOpen ? "max-h-96" : "max-h-0"
+                        }`}
                 >
                     <div className="flex flex-col px-4 pb-4 space-y-2 bg-white pt-4">
                         {navLinks.map(renderLink)}
