@@ -32,12 +32,6 @@ export default function Index() {
 
         try {
             const response = await axios.post("/sample-pdfs", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        ?.getAttribute("content"),
-                },
             });
 
             if (response.data.success) {
@@ -181,11 +175,6 @@ export default function Index() {
                                                                 `/sample-pdfs/${pdf.id}`,
                                                                 {
                                                                     method: "DELETE",
-                                                                    headers: {
-                                                                        "X-CSRF-TOKEN":
-                                                                            token,
-                                                                        Accept: "application/json",
-                                                                    },
                                                                 }
                                                             );
 

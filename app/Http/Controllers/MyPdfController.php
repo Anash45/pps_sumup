@@ -13,6 +13,8 @@ class MyPdfController extends Controller
 {
     public function build(Request $request)
     {
+        ini_set('max_execution_time', 300);
+
         $request->validate([
             'samplePdf' => 'required|integer|exists:sample_pdfs,id',
             'csv_file' => 'required|file|mimes:csv,txt',
@@ -150,7 +152,7 @@ class MyPdfController extends Controller
                     // (Optional) Print the name on the page
                     $pdf->SetFont('Helvetica', '', 8);
                     $pdf->SetTextColor(0, 0, 0);
-                    $pdf->Text($xStart + 12, ($yStart + 6)/2, $pageName);
+                    $pdf->Text($xStart + 12, ($yStart + 6) / 2, $pageName);
 
                     /** -------------------------
                      * DRAW GRID (BEHIND CARDS)

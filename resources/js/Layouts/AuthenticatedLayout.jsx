@@ -42,13 +42,6 @@ export default function AuthenticatedLayout({ title = "MyApp", children }) {
                 action={link.href}
                 className="inline"
             >
-                <input
-                    type="hidden"
-                    name="_token"
-                    value={document
-                        .querySelector('meta[name="csrf-token"]')
-                        ?.getAttribute("content")}
-                />
                 <button
                     type="submit"
                     className={`${baseClasses} text-gray-700 hover:text-gray-900`}

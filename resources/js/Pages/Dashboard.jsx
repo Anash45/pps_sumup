@@ -51,7 +51,7 @@ export default function Home() {
             }
         } catch (err) {
             // 🔴 Always log error response
-            console.log("ERROR RESPONSE:", err.response?.data);
+            console.log("ERROR RESPONSE:", err);
             console.error(err);
 
             if (err.response?.status === 422) {
